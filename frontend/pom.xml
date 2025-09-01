@@ -58,8 +58,6 @@
               <arguments>
                 <argument>run</argument>
                 <argument>build</argument>
-                <argument>--base-href</argument>
-                <argument>/frontend/</argument>
               </arguments>
             </configuration>
           </execution>
