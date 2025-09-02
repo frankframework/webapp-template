@@ -32,9 +32,6 @@ jobs:
         run: pnpm install
         working-directory: frontend/
 
-      - name: Set Cypress Ci Config
-        run: mv frontend/cypress-ci.config.ts frontend/cypress.config.ts
-
       - name: Build Frontend and Backend
         run: ./mvnw clean install -DskipTests
 
