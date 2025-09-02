@@ -88,11 +88,11 @@ public class RunCypressE2eTest {
         // It has to be like this and not use the builder
         container.withBaseUrl("http://host.testcontainers.internal:8080");
 
-        // OPTIONAL: mount host node_modules -> /e2e/node_modules in the container
-        String nodeModulesHostPath = System.getenv("CYPRESS_NODE_MODULES_HOST_PATH");
-        if (nodeModulesHostPath != null && !nodeModulesHostPath.isBlank()) {
-            container.withFileSystemBind(nodeModulesHostPath, "/e2e/node_modules", BindMode.READ_ONLY);
-        }
+//        // OPTIONAL: mount host node_modules -> /e2e/node_modules in the container
+//        String nodeModulesHostPath = System.getenv("CYPRESS_NODE_MODULES_HOST_PATH");
+//        if (nodeModulesHostPath != null && !nodeModulesHostPath.isBlank()) {
+//            container.withFileSystemBind(nodeModulesHostPath, "/e2e/node_modules", BindMode.READ_ONLY);
+//        }
 
         container.start();
         assertTrue(container.isRunning());
