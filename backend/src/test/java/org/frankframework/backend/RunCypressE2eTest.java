@@ -83,9 +83,10 @@ public class RunCypressE2eTest {
     public static void startTestContainer() {
         org.testcontainers.Testcontainers.exposeHostPorts(8080);
 
-        container = new CypressContainer("cypress/included:15.0.0")
-                .withBaseUrl("http://host.testcontainers.internal:8080")
-                .withEnv("backendUrl", "http://host.testcontainers.internal:8080");
+        container = new CypressContainer("cypress/included:15.0.0");
+
+        // It has to be like this and not use the builder
+        container.withBaseUrl("http://host.testcontainers.internal:8080");
 
         // OPTIONAL: mount host node_modules -> /e2e/node_modules in the container
         String nodeModulesHostPath = System.getenv("CYPRESS_NODE_MODULES_HOST_PATH");
