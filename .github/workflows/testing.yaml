@@ -42,3 +42,10 @@ jobs:
         env:
           CYPRESS_NODE_MODULES_HOST_PATH: ${{ github.workspace }}/frontend/node_modules
         run: ./mvnw test
+
+      - name: Store Cypress Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: java${{ env.JDK_VERSION }}_Cypress
+          path: ${{ github.workspace }}/*/target/test-classes/e2e/cypress/**
