@@ -60,7 +60,8 @@
               "buildTarget": "angular-demo-project:build:production"
             },
             "development": {
-              "buildTarget": "angular-demo-project:build:development"
+              "buildTarget": "angular-demo-project:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -86,6 +87,15 @@
               "src/styles.css"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
@@ -94,6 +104,7 @@
     "analytics": false,
     "packageManager": "pnpm",
     "schematicCollections": [
+      "angular-eslint",
       "@schematics/angular",
       "@cypress/schematic",
       "angular-eslint"

@@ -1,14 +1,22 @@
-import {Component, signal} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { TestService } from './test/test.service';
+import { TestResponse } from './models/test-response';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet
-  ],
+  imports: [],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('angular-demo-project');
+export class App implements OnInit {
+  private readonly testService: TestService = inject(TestService);
+
+  protected backendResponse?: string;
+
+  ngOnInit(): void {
+    this.testService.getHelloWorld().subscribe((response: TestResponse) => {
+      this.backendResponse = response.data;
+    })
+  }
+
 }

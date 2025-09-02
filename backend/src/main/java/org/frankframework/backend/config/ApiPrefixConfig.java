@@ -1,4 +1,4 @@
-package org.frankframework.backend;
+package org.frankframework.backend.config;
 
 
 import org.springframework.context.annotation.Configuration;
