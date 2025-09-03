@@ -21,8 +21,8 @@
         <spring.boot.version>3.5.5</spring.boot.version>
         <lombok.version>1.18.38</lombok.version>
 
-        <junit.excludedTags />
-        <junit.includedTags />
+        <junit.excludedTags/>
+        <junit.includedTags/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
@@ -92,7 +92,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <goals><goal>repackage</goal></goals>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

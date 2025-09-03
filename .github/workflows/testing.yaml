@@ -33,17 +33,10 @@ jobs:
         working-directory: src/main/frontend
 
       - name: Build Frontend and Backend
-        run: ./mvnw clean install -DskipTests
-
-      - name: Run Unit Tests
-        run: ./mvnw test
-
-      - name: Run E2e Tests
-        run: ./mvnw integration-test
-
+        run: ./mvnw clean install
 
       - name: Store Cypress Results
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: java${{ env.JDK_VERSION }}_Cypress
