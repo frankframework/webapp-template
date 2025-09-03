@@ -20,7 +20,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -46,16 +46,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RunCypressE2eTest {
     private static CypressContainer container;
     private static ConfigurableApplicationContext run;
+    private static final Path mochawesomeReportsDir = Paths.get("target/test-classes/e2e/cypress/test-results/reports/mochawesome");
 
     @BeforeAll
-    static void setUp() throws IOException {
+    static void setUp() {
         startBackend();
         startTestContainer();
     }
 
-    private static void startBackend() throws IOException {
-        Files.createDirectories(Paths.get("target/test-classes/e2e/cypress/reports/mochawesome"));
-
+    private static void startBackend() {
         SpringApplication springApplication = BackendApplication.configureApplication();
 
         run = springApplication.run();
@@ -88,6 +87,7 @@ public class RunCypressE2eTest {
 
         // It has to be like this and not use the builder
         container.withBaseUrl("http://host.testcontainers.internal:8080");
+        container.withMochawesomeReportsAt(mochawesomeReportsDir);
 
         container.start();
         assertTrue(container.isRunning());

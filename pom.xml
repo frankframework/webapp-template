@@ -82,7 +82,7 @@
 
             <!-- Copy the entire frontend project into test-classes/e2e (without node_modules, node_modules is volume mounted in the E2e test class) -->
             <testResource>
-                <directory>${project.basedir}/../frontend</directory>
+                <directory>${project.basedir}/src/main/frontend</directory>
                 <targetPath>e2e</targetPath>
             </testResource>
         </testResources>
