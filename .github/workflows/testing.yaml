@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java${{ env.JDK_VERSION }}_Cypress
-          path: ${{ github.workspace }}/*/target/test-classes/e2e/cypress/**
+          path: ${{ github.workspace }}/*/target/test-classes/e2e/cypress/test-results
