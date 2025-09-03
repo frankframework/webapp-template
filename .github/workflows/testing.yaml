@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: frontend/
+        working-directory: src/main/frontend
 
       - name: Build Frontend and Backend
         run: ./mvnw clean install -DskipTests
