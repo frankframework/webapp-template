@@ -28,6 +28,16 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
+
+    <developers>
+        <developer>
+            <name>Matthijs Smets</name>
+            <email>matthijs.smets@wearefrank.nl</email>
+            <organization>Frank!Framework</organization>
+            <organizationUrl>https://frankframework.org</organizationUrl>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
