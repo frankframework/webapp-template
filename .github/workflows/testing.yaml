@@ -35,10 +35,12 @@ jobs:
       - name: Build Frontend and Backend
         run: ./mvnw clean install -DskipTests
 
-      - name: Run Tests
-        env:
-          CYPRESS_NODE_MODULES_HOST_PATH: ${{ github.workspace }}/frontend/node_modules
+      - name: Run Unit Tests
         run: ./mvnw test
+
+      - name: Run E2e Tests
+        run: ./mvnw integration-test
+
 
       - name: Store Cypress Results
         if: always()

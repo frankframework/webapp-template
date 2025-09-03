@@ -10,30 +10,20 @@
     </parent>
 
     <groupId>org.frankframework</groupId>
-    <artifactId>multi-module-template</artifactId>
+    <artifactId>webapp-template</artifactId>
     <version>${revision}</version>
-    <name>parent</name>
-    <description>Parent for the Multi-Module template repository</description>
-    <packaging>pom</packaging>
-    <developers>
-        <developer>
-            <name>Matthijs Smets</name>
-            <email>matthijs.smets@wearefrank.nl</email>
-            <organization>Frank!Framework</organization>
-            <organizationUrl>https://frankframework.org</organizationUrl>
-        </developer>
-    </developers>
-
-    <modules>
-        <module>frontend</module>
-        <module>backend</module>
-    </modules>
+    <name>backend</name>
+    <description>backend</description>
 
     <properties>
         <revision>1.0.0</revision>
         <java.version>21</java.version>
         <spring.boot.version>3.5.5</spring.boot.version>
         <lombok.version>1.18.38</lombok.version>
+
+        <junit.excludedTags />
+        <junit.includedTags />
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -47,31 +37,133 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.wimdeblauwe</groupId>
+            <artifactId>testcontainers-cypress</artifactId>
+            <version>1.9.1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+
+            <!-- Copy the entire frontend project into test-classes/e2e (without node_modules, node_modules is volume mounted in the E2e test class) -->
+            <testResource>
+                <directory>${project.basedir}/../frontend</directory>
+                <targetPath>e2e</targetPath>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals><goal>repackage</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <id>pnpm install</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <workingDirectory>src/main/frontend</workingDirectory>
+                            <executable>pnpm</executable>
+                            <arguments>
+                                <argument>i</argument>
+                                <argument>--frozen-lockfile</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pnpm build</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <workingDirectory>src/main/frontend</workingDirectory>
+                            <executable>pnpm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!-- Surefire 3.5.3 has a bug and does not report properly on dynamic larva tests -->
+                <version>3.5.2</version>
+                <executions>
+                    <execution>
+                        <!-- This ID must be default-test otherwise tests will be executed twice -->
+                        <id>default-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <configuration>
+                            <excludedGroups>integration,${junit.excludedTags}</excludedGroups>
+                            <groups>${junit.includedTags}</groups>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <excludedGroups>${junit.excludedTags}</excludedGroups>
+                            <groups>integration</groups>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
