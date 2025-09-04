@@ -1,4 +1,4 @@
-package org.frankframework.backend;
+package org.frankframework.application;
 
 import io.github.wimdeblauwe.testcontainers.cypress.CypressContainer;
 import io.github.wimdeblauwe.testcontainers.cypress.CypressTestResults;
@@ -44,30 +44,33 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers(disabledWithoutDocker = true)
 @Tag("integration")
 public class RunCypressE2eTest {
+    private static final String SPRING_BASE_URL = "http://localhost:8080";
+    private static final String TEST_CONTAINER_BASE_URL = "http://host.testcontainers.internal:8080";
+    private static final Path MOCHAWESOME_REPORTS_DIR = Paths.get("target/test-classes/e2e/cypress/test-results/reports/mochawesome");
+
     private static CypressContainer container;
     private static ConfigurableApplicationContext run;
-    private static final Path mochawesomeReportsDir = Paths.get("target/test-classes/e2e/cypress/test-results/reports/mochawesome");
 
     @BeforeAll
     static void setUp() {
-        startBackend();
+        startApplication();
         startTestContainer();
     }
 
-    private static void startBackend() {
-        SpringApplication springApplication = BackendApplication.configureApplication();
+    private static void startApplication() {
+        SpringApplication springApplication = Application.configureApplication();
 
         run = springApplication.run();
 
         assertTrue(run.isRunning());
         await().pollInterval(5, TimeUnit.SECONDS)
                 .atMost(Duration.ofMinutes(5))
-                .until(() -> verifyAppIsHealthy());
+                .until(RunCypressE2eTest::isApplicationHealthy);
     }
 
-    private static boolean verifyAppIsHealthy() {
+    private static boolean isApplicationHealthy() {
         try {
-            String url = "http://localhost:8080/actuator/health";
+            String url = SPRING_BASE_URL + "/actuator/health";
             HttpRequest req = HttpRequest.newBuilder(URI.create(url))
                     .GET()
                     .build();
@@ -86,8 +89,10 @@ public class RunCypressE2eTest {
         container = new CypressContainer("cypress/included:15.0.0");
 
         // It has to be like this and not use the builder
-        container.withBaseUrl("http://host.testcontainers.internal:8080");
-        container.withMochawesomeReportsAt(mochawesomeReportsDir);
+        container.withBaseUrl(TEST_CONTAINER_BASE_URL);
+        container.withMochawesomeReportsAt(MOCHAWESOME_REPORTS_DIR);
+        container.withClasspathResourcePath("e2e");
+        container.withWorkingDirectory("/e2e/cypress");
 
         container.start();
         assertTrue(container.isRunning());
@@ -121,7 +126,7 @@ public class RunCypressE2eTest {
                 .map(test -> DynamicTest.dynamicTest(
                         test.getDescription(), () -> {
                             if (!test.isSuccess()) {
-                                assertTrue(verifyAppIsHealthy(), "!! application not reachable !!");
+                                assertTrue(isApplicationHealthy(), "!! application not reachable !!");
                             }
                             assertTrue(test.isSuccess(), test::getErrorMessage);
                         }

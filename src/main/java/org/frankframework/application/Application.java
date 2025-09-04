@@ -1,10 +1,10 @@
-package org.frankframework.backend;
+package org.frankframework.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendApplication {
+public class Application {
 
     public static void main(String[] args) {
         SpringApplication app = configureApplication();
@@ -14,6 +14,6 @@ public class BackendApplication {
 
 
     public static SpringApplication configureApplication() {
-        return new SpringApplication(BackendApplication.class);
+        return new SpringApplication(Application.class);
     }
 }

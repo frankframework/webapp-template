@@ -12,8 +12,8 @@
     <groupId>org.frankframework</groupId>
     <artifactId>webapp-template</artifactId>
     <version>${revision}</version>
-    <name>backend</name>
-    <description>backend</description>
+    <name>WebApp Template</name>
+    <description>A Template for a WebApp Project</description>
 
     <properties>
         <revision>1.0.0</revision>
@@ -32,7 +32,13 @@
     <developers>
         <developer>
             <name>Matthijs Smets</name>
-            <email>matthijs.smets@wearefrank.nl</email>
+            <email>matthijs.smets@frankframework.org</email>
+            <organization>Frank!Framework</organization>
+            <organizationUrl>https://frankframework.org</organizationUrl>
+        </developer>
+        <developer>
+            <name>Sergi Philipsen</name>
+            <email>sergi@frankframework.org</email>
             <organization>Frank!Framework</organization>
             <organizationUrl>https://frankframework.org</organizationUrl>
         </developer>
@@ -89,12 +95,6 @@
             <testResource>
                 <directory>src/test/resources</directory>
             </testResource>
-
-            <!-- Copy the entire frontend project into test-classes/e2e (without node_modules, node_modules is volume mounted in the E2e test class) -->
-            <testResource>
-                <directory>${project.basedir}/src/main/frontend</directory>
-                <targetPath>e2e</targetPath>
-            </testResource>
         </testResources>
         <plugins>
             <plugin>
@@ -148,31 +148,28 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <!-- Surefire 3.5.3 has a bug and does not report properly on dynamic larva tests -->
-                <version>3.5.2</version>
+                <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <!-- This ID must be default-test otherwise tests will be executed twice -->
-                        <id>default-test</id>
+                        <id>copy-frontend-to-TestClasses</id>
+                        <phase>process-test-resources</phase>
                         <goals>
-                            <goal>test</goal>
+                            <goal>copy-resources</goal>
                         </goals>
-                        <phase>test</phase>
                         <configuration>
-                            <excludedGroups>integration,${junit.excludedTags}</excludedGroups>
-                            <groups>${junit.includedTags}</groups>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>integration-tests</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <excludedGroups>${junit.excludedTags}</excludedGroups>
-                            <groups>integration</groups>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <!-- Copy the Cypress tests and configuration to the test output directory -->
+                                <resource>
+                                    <directory>${project.basedir}/src/main/frontend</directory>
+                                    <filtering>false</filtering>
+                                    <targetPath>e2e</targetPath>
+                                    <includes>
+                                        <include>tsconfig.json</include>
+                                        <include>cypress/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

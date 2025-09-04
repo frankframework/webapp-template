@@ -3,7 +3,6 @@
 {
   "exclude": [
     "./cypress/**/*",
-    "cypress.config.ts"
   ],
   "compileOnSave": false,
   "compilerOptions": {

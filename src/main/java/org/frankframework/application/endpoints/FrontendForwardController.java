@@ -1,4 +1,4 @@
-package org.frankframework.backend.endpoints;
+package org.frankframework.application.endpoints;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -98,6 +98,40 @@
               "src/**/*.html"
             ]
           }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-demo-project:serve",
+            "project": "cypress"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-demo-project:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false,
+            "project": "cypress"
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "angular-demo-project:serve",
+            "watch": true,
+            "headless": false,
+            "project": "cypress"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "angular-demo-project:serve:production"
+            }
+          }
         }
       }
     }

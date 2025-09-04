@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TestService } from './test/test.service';
-import { TestResponse } from './models/test-response';
+import { TestResponse, TestService } from './services/test.service';
 
 @Component({
   selector: 'app-root',

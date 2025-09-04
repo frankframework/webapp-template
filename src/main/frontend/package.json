@@ -7,7 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open --project cypress",
+    "cypress:run": "cypress run --project cypress"
   },
   "private": true,
   "dependencies": {
@@ -26,12 +29,11 @@
     "@angular/build": "^20.2.1",
     "@angular/cli": "^20.2.1",
     "@angular/compiler-cli": "^20.2.1",
+    "@cypress/schematic": "4.1.2",
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.33.0",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.2.0",
-    "cypress": "^15.0.0",
-    "cypress-multi-reporters": "^2.0.5",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.5.4",
@@ -43,8 +45,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "mocha": "^11.7.2",
-    "mochawesome": "^7.1.3",
     "prettier": "^3.6.2",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.40.0"

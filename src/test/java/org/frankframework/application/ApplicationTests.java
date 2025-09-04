@@ -1,10 +1,10 @@
-package org.frankframework.backend;
+package org.frankframework.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class ApplicationTests {
 
     @Test
     void contextLoads() {

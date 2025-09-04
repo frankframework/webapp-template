@@ -1,7 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TestResponse } from '../models/test-response';
+
+export interface TestResponse {
+  data: string;
+}
 
 @Injectable({
   providedIn: 'root'
