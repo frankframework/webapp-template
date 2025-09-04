@@ -10,34 +10,40 @@
     </parent>
 
     <groupId>org.frankframework</groupId>
-    <artifactId>multi-module-template</artifactId>
+    <artifactId>webapp-template</artifactId>
     <version>${revision}</version>
-    <name>parent</name>
-    <description>Parent for the Multi-Module template repository</description>
-    <packaging>pom</packaging>
-    <developers>
-        <developer>
-            <name>Matthijs Smets</name>
-            <email>matthijs.smets@wearefrank.nl</email>
-            <organization>Frank!Framework</organization>
-            <organizationUrl>https://frankframework.org</organizationUrl>
-        </developer>
-    </developers>
-
-    <modules>
-        <module>frontend</module>
-        <module>backend</module>
-        <module>builder</module>
-    </modules>
+    <name>WebApp Template</name>
+    <description>A Template for a WebApp Project</description>
 
     <properties>
         <revision>1.0.0</revision>
         <java.version>21</java.version>
         <spring.boot.version>3.5.5</spring.boot.version>
+        <lombok.version>1.18.38</lombok.version>
+
+        <junit.excludedTags/>
+        <junit.includedTags/>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
+
+    <developers>
+        <developer>
+            <name>Matthijs Smets</name>
+            <email>matthijs.smets@frankframework.org</email>
+            <organization>Frank!Framework</organization>
+            <organizationUrl>https://frankframework.org</organizationUrl>
+        </developer>
+        <developer>
+            <name>Sergi Philipsen</name>
+            <email>sergi@frankframework.org</email>
+            <organization>Frank!Framework</organization>
+            <organizationUrl>https://frankframework.org</organizationUrl>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,19 +53,126 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.wimdeblauwe</groupId>
+            <artifactId>testcontainers-cypress</artifactId>
+            <version>1.9.1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <id>pnpm install</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <workingDirectory>src/main/frontend</workingDirectory>
+                            <executable>pnpm</executable>
+                            <arguments>
+                                <argument>i</argument>
+                                <argument>--frozen-lockfile</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pnpm build</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <workingDirectory>src/main/frontend</workingDirectory>
+                            <executable>pnpm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-frontend-to-TestClasses</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <!-- Copy the Cypress tests and configuration to the test output directory -->
+                                <resource>
+                                    <directory>${project.basedir}/src/main/frontend</directory>
+                                    <filtering>false</filtering>
+                                    <targetPath>e2e</targetPath>
+                                    <includes>
+                                        <include>tsconfig.json</include>
+                                        <include>cypress/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
