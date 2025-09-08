@@ -136,6 +136,14 @@
       }
     }
   },
+  "schematics": {
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    }
+  },
   "cli": {
     "analytics": false,
     "packageManager": "pnpm",
