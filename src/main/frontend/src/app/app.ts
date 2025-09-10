@@ -5,17 +5,16 @@ import { TestResponse, TestService } from './services/test.service';
   selector: 'app-root',
   imports: [],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  private readonly testService: TestService = inject(TestService);
-
   protected backendResponse?: string;
+
+  private readonly testService: TestService = inject(TestService);
 
   ngOnInit(): void {
     this.testService.getHelloWorld().subscribe((response: TestResponse) => {
       this.backendResponse = response.data;
-    })
+    });
   }
-
 }
