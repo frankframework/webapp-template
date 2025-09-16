@@ -168,6 +168,9 @@
                                         <include>tsconfig.json</include>
                                         <include>cypress/**</include>
                                     </includes>
+                                    <excludes>
+                                        <exclude>cypress/test-results/**</exclude>
+                                    </excludes>
                                 </resource>
                             </resources>
                         </configuration>
