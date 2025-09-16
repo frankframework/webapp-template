@@ -1,10 +1,3 @@
-FROM eclipse-temurin:21-jdk-jammy AS builder
-WORKDIR /workspace
-
-COPY . .
-
-RUN ./mvnw -B -q -DskipTests clean package
-
 FROM eclipse-temurin:21-jre-jammy AS runner
 ARG GID=2000
 ARG UID=2000
@@ -18,8 +11,8 @@ RUN addgroup --gid ${GID} spring && \
 USER spring
 
 COPY --chown=spring ./docker/scripts/ /scripts/
-COPY --chown=spring --from=builder /workspace/target/webapp-template*.jar /app/webapp.jar
+COPY --chown=spring ./target/webapp-template*.jar /app/webapp.jar
 
 EXPOSE 8080
 
-CMD ["java","-jar","/app/app.jar"]
+CMD ["java","-jar","/app/webapp.jar"]

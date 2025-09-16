@@ -1,6 +1,8 @@
+# Docker compose to start and build the webapp service. For a full build, use Maven.
+
 services:
   webapp:
-    image: webapp-template:latest
+    image: ghcr.io/frankframework/webapp-template:latest
     build:
       dockerfile: ./docker/Dockerfile
       context: .
