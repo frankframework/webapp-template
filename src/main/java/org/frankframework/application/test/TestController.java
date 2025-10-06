@@ -1,7 +1,6 @@
-package org.frankframework.application.endpoints;
+package org.frankframework.application.test;
 
 
-import org.frankframework.application.models.TestResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
     @GetMapping
-    public ResponseEntity<TestResponse> test() {
-        return ResponseEntity.ok(new TestResponse("Hello World!"));
+    public ResponseEntity<TestDto> test() {
+        return ResponseEntity.ok(new TestDto("Hello World!"));
     }
 }
