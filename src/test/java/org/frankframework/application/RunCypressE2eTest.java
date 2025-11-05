@@ -116,9 +116,13 @@ public class RunCypressE2eTest {
     Stream<DynamicContainer> runCypressTests() throws InterruptedException, IOException, TimeoutException {
         CypressTestResults testResults = container.getTestResults();
 
-        return testResults.getSuites()
-                .stream()
-                .map(this::createContainerFromSuite);
+        if (testResults.getNumberOfFailingTests() > 0) {
+            throw new AssertionError(
+                    "Cypress tests failed! " + testResults.getNumberOfFailingTests() + " test(s) failed.\n\n"
+                            + testResults);
+        }
+
+        return testResults.getSuites().stream().map(this::createContainerFromSuite);
     }
 
     private DynamicContainer createContainerFromSuite(CypressTestSuite suite) {
