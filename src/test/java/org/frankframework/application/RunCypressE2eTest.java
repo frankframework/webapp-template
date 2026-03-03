@@ -21,7 +21,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -46,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RunCypressE2eTest {
     private static final String SPRING_BASE_URL = "http://localhost:8080";
     private static final String TEST_CONTAINER_BASE_URL = "http://host.testcontainers.internal:8080";
-    private static final Path MOCHAWESOME_REPORTS_DIR = Paths.get("target/test-classes/e2e/cypress/test-results/reports/mochawesome");
+    private static final Path MOCHAWESOME_REPORTS_DIR = Path.of("target/test-classes/e2e/cypress/test-results/reports/mochawesome");
 
     private static CypressContainer container;
     private static ConfigurableApplicationContext run;
