@@ -26,10 +26,8 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
-        <!-- Are these maven.compiler tags required? Doesnt this get handled by spring boot via <java.version>25</java.version> -->
         <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        
+        <maven.compiler.target>25</maven.compiler.target>        
     </properties>
 
     <developers>
